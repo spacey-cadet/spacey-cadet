@@ -1,5 +1,5 @@
 # spacey-cadet
-# Hey, I'm Theo 👋
+# Hey, I'm Theo 
 
 **Full-Stack Engineer · AI/ML Researcher · Based in Nairobi, Kenya**
 
@@ -7,16 +7,16 @@ I build things end-to-end — from fine-tuning speech models in PyTorch to shipp
 
 ---
 
-## 🧠 What I'm Working On
+##  What I'm Working On
 
 - **WavLM Emotion Recognition** — Fine-tuning Microsoft WavLM Base for emotion recognition using HuggingFace Transformers & PyTorch. Managing the full training pipeline: data loading, augmentation, evaluation, and checkpoint management.
 - **Kenyan Audio Corpus (DAPT)** — Curating and cleaning a Kenya-specific audio dataset for domain-adaptive pre-training of speech/language models. Applying deduplication, quality filters, and preprocessing pipelines informed by literature like *Don't Stop Pre-Training*.
 
 ---
 
-## 🛠️ Featured Projects
+## Featured Projects
 
-### 📱 [Scoopz](https://github.com/spacey-cadet/scoopz)
+### [Scoopz](https://github.com/spacey-cadet/scoopz)
 End-to-end TikTok automation pipeline running on Android via Termux.
 - Watches a link inbox, downloads videos, extracts frames with `ffmpeg`, and generates captions via OpenAI
 - Includes an Android share extension (`ShareActivity.kt`) so you can queue links directly from the TikTok app
@@ -26,12 +26,12 @@ End-to-end TikTok automation pipeline running on Android via Termux.
 
 ---
 
-### 🏆 Pay Hero — B2B Communication Platform *(1st Place, Kenya Buildathon 2024)*
+### Pay Hero — B2B Communication Platform *(1st Place, Kenya Buildathon 2024)*
 Scalable B2B communication system helping businesses engage customers efficiently. Built in a 2-person team under time pressure.
 
 ---
 
-### 📊 HarambeeStats
+### HarambeeStats
 Scalable React web application with a consistent, user-friendly interface built in collaboration with a designer.
 
 **Stack:** React · System Architecture · UI/UX
@@ -60,14 +60,14 @@ Scalable React web application with a consistent, user-friendly interface built 
 
 ---
 
-## 🎓 Education
+## Education
 
 **BSc Computer Science** — Jomo Kenyatta University of Agriculture & Technology *(Expected 2026)*
 Data Structures & Algorithms · Artificial Intelligence · Operating Systems · System Design · Cryptography
 
 ---
 
-## 📬 Get in Touch
+## Get in Touch
 
 - **Email:** theo.korirchbng@gmail.com
 - **LinkedIn:** [Theo Korir](https://linkedin.com/in/theo-korir)
