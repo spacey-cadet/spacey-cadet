@@ -56,7 +56,7 @@ Scalable React web application with a consistent, user-friendly interface built 
 `Android (Kotlin/Java)` `Termux Automation`
 
 **Tools**
-`Git` `GitHub` `AWS` `Figma` `VS Code`
+`Git` `GitHub` `AWS` `Figma` `VS Code` `Docker`
 
 ---
 
