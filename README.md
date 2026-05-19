@@ -1,7 +1,7 @@
 # spacey-cadet
 # Hey, I'm Theo 
 
-**Full-Stack Engineer · AI/ML Researcher · Based in Nairobi, Kenya**
+**AI Systems Engineer • Full-Stack Developer • Applied ML Researcher  · Based in Nairobi, Kenya**
 
 I build things end-to-end — from fine-tuning speech models in PyTorch to shipping production web apps and Android automation tools. Currently doing independent research on speech model fine-tuning and Kenyan-specific audio dataset curation for domain-adaptive pre-training (DAPT).
 
