@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:0d0d14,100:0d0d14&height=180&section=header&text=Theo%20Korir&fontSize=52&fontColor=ffffff&fontAlignY=52&fontAlign=50&desc=Full-Stack%20%C2%B7%20AI%2FML%20%C2%B7%20Applied%20Research%20%C2%B7%20Nairobi&descAlignY=72&descAlign=50&descSize=13&descColor=c084fc&animation=fadeIn" width="100%"/>
+<img src="banner.svg" width="100%" alt="Theo Korir — Full-Stack · AI/ML · Applied Research · Nairobi"/>
 
 <br/>
 
@@ -11,7 +11,7 @@
 
 <br/>
 
-> *I build anything.*
+> *I build things. Web apps, ML pipelines, Android automation tools, production APIs — if it can be built, I'll build it.*
 > *Speech models fine-tuned in PyTorch. Platforms shipped solo. Pipelines running on nothing but a phone.*
 > *Full-stack, end-to-end, whatever it takes.*
 
@@ -174,7 +174,6 @@ Data Structures & Algorithms · Artificial Intelligence · Operating Systems · 
 ---
 
 <div align="center">
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:0d0d14,100:0d0d14&height=60&section=footer&animation=fadeIn" width="100%"/>
-
+<br/>
 <sub>Nairobi · signal open · no excuses</sub>
 </div>
