@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:0d0d14,100:0d0d14&height=240&section=header&text=Theo%20Korir&fontSize=58&fontColor=ffffff&fontAlignY=44&fontAlign=12&desc=FULL-STACK%20%C2%B7%20AI%2FML%20%C2%B7%20APPLIED%20RESEARCH%20%C2%B7%20NAIROBI&descAlignY=62&descAlign=12&descSize=12&descColor=c084fc&animation=fadeIn" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:0d0d14,100:0d0d14&height=180&section=header&text=Theo%20Korir&fontSize=52&fontColor=ffffff&fontAlignY=52&fontAlign=50&desc=Full-Stack%20%C2%B7%20AI%2FML%20%C2%B7%20Applied%20Research%20%C2%B7%20Nairobi&descAlignY=72&descAlign=50&descSize=13&descColor=c084fc&animation=fadeIn" width="100%"/>
 
 <br/>
 
@@ -11,9 +11,9 @@
 
 <br/>
 
-> *Builds end-to-end — fine-tuning speech models in PyTorch, shipping production platforms,*
-> *and running Android automation pipelines on nothing but a phone and Termux.*
-> *No server. No desktop. No excuses.*
+> *I build anything.*
+> *Speech models fine-tuned in PyTorch. Platforms shipped solo. Pipelines running on nothing but a phone.*
+> *Full-stack, end-to-end, whatever it takes.*
 
 </div>
 
