@@ -15,7 +15,7 @@
 
 ---
 
-## Projects
+## Open Source Projects
 
 ### [Churn Escalation Detector — End-to-End MLOps Pipeline](https://github.com/spacey-cadet/churn-escalation)
 Churn-risk scoring pipeline that runs unchanged in two deployment modes — local Docker/SQLite and AWS Lambda/DynamoDB/S3 — with identical training, gating, and serving code across both. Two-stage ETL data-quality gates (ingestion + transformation) block the pipeline and fire Slack/Discord alerts on failure. XGBoost model with Platt calibration and two independently-tuned cascade thresholds routes predictions into auto-resolve / review-queue / senior-escalation tiers. Champion-challenger promotion gate blocks any retrain that regresses PR-AUC on held-out or stress-test slices, backed by a versioned model registry with JSON model cards. Feature store with true point-in-time joins, an hourly drift monitor (KS test + PSI), and a 21-day label-delay backfill job that recomputes precision/recall/F1 once ground truth lands. CI/CD via GitHub Actions with OIDC (no long-lived AWS keys) and canary rollouts via hashed customer routing.
