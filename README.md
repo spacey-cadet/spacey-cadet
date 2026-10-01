@@ -4,17 +4,6 @@
 > Speech models fine-tuned in PyTorch. Platforms shipped solo. Pipelines running on nothing but a phone.
 </div>
 
----
-
-## Current Research
-
-| Project | Description |
-|---|---|
-| **WavLM Emotion Recognition** | Fine-tuning Microsoft WavLM Base for 8-class emotion recognition across RAVDESS, IEMOCAP, and CREMA-D. Full pipeline: data loading, augmentation, evaluation, checkpoint management. 77.3% in-distribution accuracy; cross-corpus gap diagnosed via arousal/valence analysis. |
-| **Kenyan Audio Corpus (DAPT)** | Curating a Kenya-specific audio dataset for domain-adaptive pre-training — deduplication, quality filtering, preprocessing — informed by *Don't Stop Pre-Training*. |
-
----
-
 ## Open Source Projects
 
 ### [Infra Risk Guardian — Terraform Plan Gatekeeper](https://github.com/spacey-cadet/infra-cost)
