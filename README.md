@@ -17,22 +17,29 @@
 
 ## Open Source Projects
 
+### [Infra Risk Guardian — Terraform Plan Gatekeeper](https://github.com/spacey-cadet/infra-cost)
+Agent that intercepts every `terraform plan` and decides auto-apply or hold-for-human, built so it never auto-applies a change that quietly loosens security, especially a widened GitHub Actions OIDC trust condition. It parses Terraform's JSON plan (not scraped stdout) and runs a deterministic, glob-aware semantic diff on the trust policy's `sub`/`aud` conditions, so it catches `repo:you/repo:*` as a superset of `repo:you/repo:ref:refs/heads/main`. A Strands Agents layer only explains and prioritizes for the reviewer and never overrides that verdict. A strict OR-gate escalation matrix holds on any IAM resource change, an OIDC diff, a cost delta of $2/mo or 40% of current spend, a resource type never seen in the repo's plan history, or an unparseable plan, and any exception in the handler also fails closed. It runs as an SQS-triggered Lambda container image, posts a GitHub check run and PR comment, escalates through SNS, and logs every decision plus a `human_override` field in DynamoDB. Everything is provisioned with Terraform under least-privilege OIDC roles, with cost estimates from Infracost (heuristic fallback). Pytest fixtures cover the safe, expensive, OIDC-widening, and malformed plans and run without an AWS account.
+
+`Python` `Strands Agents` `Terraform` `AWS Lambda` `SQS` `SNS` `DynamoDB` `S3` `GitHub Actions OIDC` `Infracost` `Docker` `pytest`
+
+---
+
 ### [Churn Escalation Detector — End-to-End MLOps Pipeline](https://github.com/spacey-cadet/churn-escalation)
-Churn-risk scoring pipeline that runs unchanged in two deployment modes — local Docker/SQLite and AWS Lambda/DynamoDB/S3 — with identical training, gating, and serving code across both. Two-stage ETL data-quality gates (ingestion + transformation) block the pipeline and fire Slack/Discord alerts on failure. XGBoost model with Platt calibration and two independently-tuned cascade thresholds routes predictions into auto-resolve / review-queue / senior-escalation tiers. Champion-challenger promotion gate blocks any retrain that regresses PR-AUC on held-out or stress-test slices, backed by a versioned model registry with JSON model cards. Feature store with true point-in-time joins, an hourly drift monitor (KS test + PSI), and a 21-day label-delay backfill job that recomputes precision/recall/F1 once ground truth lands. CI/CD via GitHub Actions with OIDC (no long-lived AWS keys) and canary rollouts via hashed customer routing.
+Churn-risk scoring pipeline that runs unchanged in two modes, local Docker/SQLite and AWS Lambda/DynamoDB/S3, with identical training, gating, and serving code in both. Two-stage ETL data-quality gates (ingestion and transformation) block the pipeline and fire Slack/Discord alerts on failure. An XGBoost model with Platt calibration and two independently tuned cascade thresholds routes predictions into auto-resolve, review-queue, and senior-escalation tiers. A champion-challenger gate blocks any retrain that regresses PR-AUC on held-out or stress-test slices, backed by a versioned model registry with JSON model cards. The feature store does true point-in-time joins, an hourly drift monitor runs KS test and PSI, and a 21-day label-delay backfill recomputes precision/recall/F1 once ground truth lands. CI/CD runs on GitHub Actions with OIDC (no long-lived AWS keys) and canary rollouts via hashed customer routing.
 
 `Python` `XGBoost` `FastAPI` `Docker` `AWS Lambda` `DynamoDB` `S3` `GitHub Actions`
 
 ---
 
 ### [Click-Fraud & Churn Risk Scoring Platform (ad-platform-ml)](https://github.com/spacey-cadet/ad-fraud)
-Two real-time scoring services — click-fraud detection and churn prediction — sharing a common feature base, deployable as either a free local Docker stack or a serverless AWS stack under a shared ~$15/month budget. Streaming feature pipeline (Redpanda + Faust locally; SQS → aggregator Lambda → DynamoDB in production) computes rolling click-count windows per user for real-time fraud scoring. AWS path provisioned entirely with Terraform — Lambda container images, DynamoDB, SQS + DLQ, SNS alerting, CloudWatch alarms/dashboards, GitHub OIDC deploy role — deliberately avoiding always-on services to stay within budget. Experiments tracked with MLflow; every local-vs-cloud architecture trade-off documented in an ADR.
+Two real-time scoring services, click-fraud detection and churn prediction, share a feature base and deploy as either a free local Docker stack or a serverless AWS stack under a ~$15/month budget. The streaming pipeline (Redpanda + Faust locally; SQS → aggregator Lambda → DynamoDB in production) computes rolling per-user click-count windows for real-time fraud scoring. The AWS path is all Terraform (Lambda container images, DynamoDB, SQS + DLQ, SNS alerting, CloudWatch alarms/dashboards, GitHub OIDC deploy role) and avoids always-on services to stay within budget. Experiments are tracked in MLflow, and every local-vs-cloud architecture trade-off is documented in an ADR.
 
 `Python` `LightGBM` `Redis/Feast` `Redpanda/Faust` `SQS` `DynamoDB` `Terraform` `Docker` `MLflow`
 
 ---
 
 ### [Scoopz](https://github.com/spacey-cadet/scoopz)
-End-to-end TikTok automation pipeline running entirely on a phone via Termux. Watches a link inbox, downloads videos in HD, extracts frames with `ffmpeg`, and generates captions via GPT-4o Vision. Async 5-worker pipeline with parallel captioning across 3 concurrent workers. FastAPI control layer for job orchestration, retry logic, and per-worker failure isolation.
+End-to-end TikTok automation pipeline running entirely on a phone via Termux. It watches a link inbox, downloads videos in HD, extracts frames with `ffmpeg`, and captions them with GPT-4o Vision. An async 5-worker pipeline captions in parallel across 3 concurrent workers, and a FastAPI control layer handles job orchestration, retry logic, and per-worker failure isolation.
 
 **Impact:** ~58% faster content processing (2 hrs → 50 min for 40 videos), fully hands-off.
 
@@ -55,7 +62,7 @@ Fine-tuned a 24-layer Transformer for 8-class emotion recognition across RAVDESS
 ---
 
 ### [WavLM SER — Production Inference Pipeline (Deployment)](https://github.com/spacey-cadet/ser-inference)
-Rebuilt a single-endpoint inference demo into a production-grade serving pipeline (FastAPI + Docker on HuggingFace Spaces) covering calibration, drift monitoring, rollout, and latency — running entirely on free-tier infrastructure. Offline-fit Platt/isotonic calibration and a two-threshold confidence cascade let uncertain predictions degrade gracefully instead of returning an overconfident wrong label. Input-validation and voice-activity-trimming gates feed a consent-gated feature-logging pipeline into a KS-test drift monitor and a low-confidence review/labeling queue. In-process champion/challenger canary routing, evaluated offline on PR-AUC and per-class F1 before any rollout. p50/p99 latency tracked per request and gated on release; testing and promotion automated via GitHub Actions.
+Rebuilt a single-endpoint inference demo into a production-grade serving pipeline (FastAPI + Docker on HuggingFace Spaces) covering calibration, drift monitoring, rollout, and latency, all on free-tier infrastructure. Offline-fit Platt/isotonic calibration and a two-threshold confidence cascade let uncertain predictions degrade gracefully instead of returning an overconfident wrong label. Input-validation and voice-activity-trimming gates feed a consent-gated feature-logging pipeline into a KS-test drift monitor and a low-confidence review/labeling queue. In-process champion/challenger canary routing is evaluated offline on PR-AUC and per-class F1 before any rollout. p50/p99 latency is tracked per request and gated on release, with testing and promotion automated through GitHub Actions.
 
 `FastAPI` `Docker` `HuggingFace Spaces` `GitHub Actions` `Great Expectations`
 
@@ -93,6 +100,7 @@ Three production platforms — full lifecycle ownership, architecture to deploym
 ![DAPT](https://img.shields.io/badge/DAPT-111827?style=flat-square&logoColor=white)
 ![SpeechBrain](https://img.shields.io/badge/SpeechBrain-111827?style=flat-square&logoColor=white)
 ![OpenAI API](https://img.shields.io/badge/OpenAI%20API-111827?style=flat-square&logo=openai&logoColor=white)
+![Strands Agents](https://img.shields.io/badge/Strands%20Agents-111827?style=flat-square&logoColor=white)
  
 **Classical ML**&nbsp;&nbsp;
 ![XGBoost](https://img.shields.io/badge/XGBoost-111827?style=flat-square&logoColor=ff6600)
@@ -127,6 +135,7 @@ Three production platforms — full lifecycle ownership, architecture to deploym
 ![Android](https://img.shields.io/badge/Android-111827?style=flat-square&logo=android&logoColor=86efac)
 ![Termux](https://img.shields.io/badge/Termux-111827?style=flat-square&logoColor=white)
 ![AWS](https://img.shields.io/badge/AWS-111827?style=flat-square&logo=amazonaws&logoColor=fb923c)
+![Terraform](https://img.shields.io/badge/Terraform-111827?style=flat-square&logo=terraform&logoColor=a78bfa)
 ![Docker](https://img.shields.io/badge/Docker-111827?style=flat-square&logo=docker&logoColor=38bdf8)
 ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-111827?style=flat-square&logo=githubactions&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-111827?style=flat-square&logo=vercel&logoColor=white)
