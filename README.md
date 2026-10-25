@@ -7,9 +7,18 @@
 ## Open Source Projects
 
 ### [Infra Risk Guardian — Terraform Plan Gatekeeper](https://github.com/spacey-cadet/infra-cost)
-Agent that intercepts every `terraform plan` and decides auto-apply or hold-for-human, built so it never auto-applies a change that quietly loosens security, especially a widened GitHub Actions OIDC trust condition. It parses Terraform's JSON plan (not scraped stdout) and runs a deterministic, glob-aware semantic diff on the trust policy's `sub`/`aud` conditions, so it catches `repo:you/repo:*` as a superset of `repo:you/repo:ref:refs/heads/main`. A Strands Agents layer only explains and prioritizes for the reviewer and never overrides that verdict. A strict OR-gate escalation matrix holds on any IAM resource change, an OIDC diff, a cost delta of $2/mo or 40% of current spend, a resource type never seen in the repo's plan history, or an unparseable plan, and any exception in the handler also fails closed. It runs as an SQS-triggered Lambda container image, posts a GitHub check run and PR comment, escalates through SNS, and logs every decision plus a `human_override` field in DynamoDB. Everything is provisioned with Terraform under least-privilege OIDC roles, with cost estimates from Infracost (heuristic fallback). Pytest fixtures cover the safe, expensive, OIDC-widening, and malformed plans and run without an AWS account.
+Decision API that reviews every terraform plan and returns a deterministic auto_apply or hold, built so it never auto-applies a change that quietly loosens security, especially a widened GitHub Actions OIDC trust condition. It parses Terraform's JSON plan (not scraped stdout) and runs a glob-aware semantic diff on the trust policy's sub/aud conditions, so it catches repo:you/repo:* as a superset of repo:you/repo:ref:refs/heads/main. A plain-Python OR-gate matrix is the sole authority and fails closed: it holds on any IAM resource change, an OIDC diff, a cost delta of $2/mo or 40% of baseline, a resource type never seen in the repo's plan history, or an unparseable plan. It now runs as a synchronous, SigV4-signed Lambda Function URL (IAM-authorised), with the old S3 and SQS hop removed. Pipelines call it through a small pip-installable infra-risk CLI that assumes a scoped role via GitHub OIDC and exits 0 for auto-apply, 2 for hold. Advisory layers (a Strands Agents explainer and an optional open-weight GLiNER2.5-Decide classifier running in the CI runner) add review context to the response but can never override the verdict. Each decision posts a GitHub check run and PR comment, escalates through SNS, and is logged with a human_override field in DynamoDB. Provisioned with Terraform under least-privilege OIDC roles, with Infracost estimates (heuristic fallback). Pytest fixtures cover the safe, expensive, OIDC-widening, and malformed plans and run without an AWS account.
 
 `Python` `Strands Agents` `Terraform` `AWS Lambda` `SQS` `SNS` `DynamoDB` `S3` `GitHub Actions OIDC` `Infracost` `Docker` `pytest`
+
+---
+
+### [Scoopz](https://github.com/spacey-cadet/scoopz)
+TikTok share-to-caption pipeline, rebuilt from a Termux script pair into a native Android app (Kotlin, Jetpack Compose). Share a link from TikTok and a Room-backed queue feeds WorkManager workers that download the video in HD (up to 3 in parallel, streamed to MediaStore with retries and de-duplication by video id) and write a ready-to-post caption. Frame picking is on-device: ML Kit scores sampled frames for sharpness, faces and on-screen text, and only the best one is sent. Captions are text-first, with a fast text model working from the title, OCR and image labels, and a vision model only on demand. Free-tier NVIDIA endpoints with a backup model, a rate limiter and Retry-After handling keep it at zero cost, and optional Groq Whisper transcription feeds spoken words into the prompt. A typed error matrix turns failures into a plain-language cause and fix, with an optional AI explainer that redacts keys before sending. A built-in "Find models" tool speed-tests which vision models a key can actually use. The original Termux pipeline (async workers, FastAPI control layer) is kept as a working legacy path.
+
+**Impact:** the Termux version cut content processing ~58% (2 hrs → 50 min for 40 videos); the app moves the same flow into one tap with no terminal which makes it even faster.
+
+`Python` `Kotlin` `Android` `FastAPI` `OpenAI API` `ffmpeg` `Termux`
 
 ---
 
@@ -24,15 +33,6 @@ Churn-risk scoring pipeline that runs unchanged in two modes, local Docker/SQLit
 Two real-time scoring services, click-fraud detection and churn prediction, share a feature base and deploy as either a free local Docker stack or a serverless AWS stack under a ~$15/month budget. The streaming pipeline (Redpanda + Faust locally; SQS → aggregator Lambda → DynamoDB in production) computes rolling per-user click-count windows for real-time fraud scoring. The AWS path is all Terraform (Lambda container images, DynamoDB, SQS + DLQ, SNS alerting, CloudWatch alarms/dashboards, GitHub OIDC deploy role) and avoids always-on services to stay within budget. Experiments are tracked in MLflow, and every local-vs-cloud architecture trade-off is documented in an ADR.
 
 `Python` `LightGBM` `Redis/Feast` `Redpanda/Faust` `SQS` `DynamoDB` `Terraform` `Docker` `MLflow`
-
----
-
-### [Scoopz](https://github.com/spacey-cadet/scoopz)
-End-to-end TikTok automation pipeline running entirely on a phone via Termux. It watches a link inbox, downloads videos in HD, extracts frames with `ffmpeg`, and captions them with GPT-4o Vision. An async 5-worker pipeline captions in parallel across 3 concurrent workers, and a FastAPI control layer handles job orchestration, retry logic, and per-worker failure isolation.
-
-**Impact:** ~58% faster content processing (2 hrs → 50 min for 40 videos), fully hands-off.
-
-`Python` `Kotlin` `Android` `FastAPI` `OpenAI API` `ffmpeg` `Termux`
 
 ---
 
