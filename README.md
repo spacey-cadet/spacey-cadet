@@ -36,13 +36,6 @@ Two real-time scoring services, click-fraud detection and churn prediction, shar
 
 ---
 
-### [AI Workflow Pipeline Builder](https://github.com/spacey-cadet)
-Visual, node-based engine for building and validating AI pipelines with real-time execution. Started as a static ReactFlow demo; now runs on 9 modular node types (LLM, API Call, Vector Store, Conditional, etc.) built on a reusable BaseNode architecture. Regex-driven variable parsing (`{{ variables }}`) auto-generates graph connections. FastAPI backend validates DAG integrity via Kahn's Algorithm before execution.
-
-`React` `ReactFlow` `FastAPI` `Python` `DAG Algorithms`
-
----
-
 ### [Speech Emotion Recognition — WavLM Fine-Tuning](https://github.com/spacey-cadet)
 Fine-tuned a 24-layer Transformer for 8-class emotion recognition across RAVDESS, IEMOCAP, and CREMA-D. 77.3% accuracy in-distribution; cross-corpus testing exposed a 16–23pp generalisation drop, diagnosed via arousal/valence failure analysis — a known limit of self-supervised speech embeddings. Scoped fixes: adversarial domain adaptation, speaker disentanglement, Kenya-specific DAPT corpus.
 
