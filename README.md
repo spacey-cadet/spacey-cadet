@@ -6,7 +6,7 @@
 
 ## Open Source Projects
 
-### [Infra Risk Guardian — Terraform Plan Gatekeeper](https://github.com/spacey-cadet/infra-cost)
+### [Infra Sec](https://github.com/spacey-cadet/infra-sec)
 Decision API that reviews every Terraform plan and returns a deterministic `auto_apply` or `hold`, built to never auto-apply a change that quietly loosens security, especially a widened GitHub Actions OIDC trust condition. It parses the JSON plan and runs a glob-aware diff on the trust policy, and a plain-Python rule matrix fails closed on any IAM change, OIDC diff, cost jump of $2/mo or 40%, unseen resource type, or unparseable plan. It runs as a SigV4-signed Lambda Function URL called by a pip-installable CLI that exits 0 for auto-apply and 2 for hold, with an optional AI explainer and classifier that add review context but can never override the verdict.
 
 `Python` `Strands Agents` `Terraform` `AWS Lambda` `SQS` `SNS` `DynamoDB` `S3` `GitHub Actions OIDC` `Infracost` `Docker` `pytest`
@@ -30,14 +30,14 @@ Kaggle RSNA challenge to detect 12 knee abnormalities from MRI when only 58 of 4
 
 ---
 
-### [Churn Escalation Detector — End-to-End MLOps Pipeline](https://github.com/spacey-cadet/churn-escalation)
+### [Churn Escalation Detector](https://github.com/spacey-cadet/churn-escalation)
 Churn-risk scoring pipeline that runs unchanged in two modes, local Docker/SQLite and AWS Lambda/DynamoDB/S3, with identical training, gating and serving code in both. A calibrated XGBoost model routes each prediction into auto-resolve, review-queue or senior-escalation tiers, while data-quality gates and a champion-challenger check block bad data and any retrain that regresses PR-AUC. It also runs hourly drift monitoring (KS, PSI), backfills metrics once labels land after 21 days, and deploys through GitHub Actions OIDC with canary rollouts.
 
 `Python` `XGBoost` `FastAPI` `Docker` `AWS Lambda` `DynamoDB` `S3` `GitHub Actions`
 
 ---
 
-### [Click-Fraud & Churn Risk Scoring Platform (ad-platform-ml)](https://github.com/spacey-cadet/ad-fraud)
+### [Click-Fraud & Churn Risk Scoring Platform ](https://github.com/spacey-cadet/ad-fraud)
 Two real-time scoring services, click-fraud detection and churn prediction, share one feature base and deploy as either a free local Docker stack or a serverless AWS stack under ~$15/month. A streaming pipeline (Redpanda + Faust locally; SQS → Lambda → DynamoDB in production) computes rolling per-user click windows for live fraud scoring. The AWS side is all Terraform with no always-on services, with MLflow experiment tracking and an ADR for every local-vs-cloud trade-off.
 
 `Python` `LightGBM` `Redis/Feast` `Redpanda/Faust` `SQS` `DynamoDB` `Terraform` `Docker` `MLflow`
@@ -51,7 +51,7 @@ Fine-tuned a 24-layer Transformer for 8-class emotion recognition across RAVDESS
 
 ---
 
-### [WavLM SER — Production Inference Pipeline (Deployment)](https://github.com/spacey-cadet/ser-inference)
+### [WavLM SER — Production Inference Pipeline](https://github.com/spacey-cadet/ser-inference)
 Rebuilt a single-endpoint emotion-recognition demo into a production-grade serving pipeline (FastAPI + Docker on HuggingFace Spaces) covering calibration, drift monitoring, rollout and latency, all on free-tier infrastructure. Calibration and a two-threshold confidence cascade let uncertain predictions degrade gracefully instead of returning an overconfident wrong label, and a consent-gated logging pipeline feeds a KS-test drift monitor and a low-confidence review queue. Canary routing is checked offline on PR-AUC and per-class F1 before rollout, and p50/p99 latency gates each release through GitHub Actions.
 
 `FastAPI` `Docker` `HuggingFace Spaces` `GitHub Actions` `Great Expectations`
