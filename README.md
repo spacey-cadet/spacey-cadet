@@ -7,30 +7,38 @@
 ## Open Source Projects
 
 ### [Infra Risk Guardian — Terraform Plan Gatekeeper](https://github.com/spacey-cadet/infra-cost)
-Decision API that reviews every terraform plan and returns a deterministic auto_apply or hold, built so it never auto-applies a change that quietly loosens security, especially a widened GitHub Actions OIDC trust condition. It parses Terraform's JSON plan (not scraped stdout) and runs a glob-aware semantic diff on the trust policy's sub/aud conditions, so it catches repo:you/repo:* as a superset of repo:you/repo:ref:refs/heads/main. A plain-Python OR-gate matrix is the sole authority and fails closed: it holds on any IAM resource change, an OIDC diff, a cost delta of $2/mo or 40% of baseline, a resource type never seen in the repo's plan history, or an unparseable plan. It now runs as a synchronous, SigV4-signed Lambda Function URL (IAM-authorised), with the old S3 and SQS hop removed. Pipelines call it through a small pip-installable infra-risk CLI that assumes a scoped role via GitHub OIDC and exits 0 for auto-apply, 2 for hold. Advisory layers (a Strands Agents explainer and an optional open-weight GLiNER2.5-Decide classifier running in the CI runner) add review context to the response but can never override the verdict. Each decision posts a GitHub check run and PR comment, escalates through SNS, and is logged with a human_override field in DynamoDB. Provisioned with Terraform under least-privilege OIDC roles, with Infracost estimates (heuristic fallback). Pytest fixtures cover the safe, expensive, OIDC-widening, and malformed plans and run without an AWS account.
+Decision API that reviews every Terraform plan and returns a deterministic `auto_apply` or `hold`, built to never auto-apply a change that quietly loosens security, especially a widened GitHub Actions OIDC trust condition. It parses the JSON plan and runs a glob-aware diff on the trust policy, and a plain-Python rule matrix fails closed on any IAM change, OIDC diff, cost jump of $2/mo or 40%, unseen resource type, or unparseable plan. It runs as a SigV4-signed Lambda Function URL called by a pip-installable CLI that exits 0 for auto-apply and 2 for hold, with an optional AI explainer and classifier that add review context but can never override the verdict.
 
 `Python` `Strands Agents` `Terraform` `AWS Lambda` `SQS` `SNS` `DynamoDB` `S3` `GitHub Actions OIDC` `Infracost` `Docker` `pytest`
 
 ---
 
 ### [Scoopz](https://github.com/spacey-cadet/scoopz)
-TikTok share-to-caption pipeline, rebuilt from a Termux script pair into a native Android app (Kotlin, Jetpack Compose). Share a link from TikTok and a Room-backed queue feeds WorkManager workers that download the video in HD (up to 3 in parallel, streamed to MediaStore with retries and de-duplication by video id) and write a ready-to-post caption. Frame picking is on-device: ML Kit scores sampled frames for sharpness, faces and on-screen text, and only the best one is sent. Captions are text-first, with a fast text model working from the title, OCR and image labels, and a vision model only on demand. Free-tier NVIDIA endpoints with a backup model, a rate limiter and Retry-After handling keep it at zero cost, and optional Groq Whisper transcription feeds spoken words into the prompt. A typed error matrix turns failures into a plain-language cause and fix, with an optional AI explainer that redacts keys before sending. A built-in "Find models" tool speed-tests which vision models a key can actually use. The original Termux pipeline (async workers, FastAPI control layer) is kept as a working legacy path.
+TikTok share-to-caption pipeline, rebuilt from a Termux script pair into a native Android app (Kotlin, Jetpack Compose): share a link and queued background workers download the video in HD and write a ready-to-post caption. On-device ML Kit picks the sharpest frame (faces, on-screen text), and free-tier NVIDIA models with a backup, rate limiting and retries generate the caption at zero cost. Failures turn into plain-language causes and fixes, and the original Termux pipeline (async workers, FastAPI) stays as a working legacy path.
 
-**Impact:** the Termux version cut content processing ~58% (2 hrs → 50 min for 40 videos); the app moves the same flow into one tap with no terminal which makes it even faster.
+**Impact:** the Termux version cut content processing ~58% (2 hrs → 50 min for 40 videos); the app makes the same flow a single tap.
 
 `Python` `Kotlin` `Android` `FastAPI` `OpenAI API` `ffmpeg` `Termux`
 
 ---
 
+### [Knee MRI Abnormality Detection](https://github.com/spacey-cadet/knee-abnormality-detection)
+
+Kaggle RSNA challenge to detect 12 knee abnormalities from MRI when only 58 of 4,407 studies have human labels. Qwen3-8B and a rule-based labeler turn multilingual radiology reports into training labels (0.85 mean AUC against the gold set), which train a multi-plane attention model validated across scanners.
+
+`Python` `PyTorch` `timm` `pydicom` `Qwen3` `Kaggle`
+
+---
+
 ### [Churn Escalation Detector — End-to-End MLOps Pipeline](https://github.com/spacey-cadet/churn-escalation)
-Churn-risk scoring pipeline that runs unchanged in two modes, local Docker/SQLite and AWS Lambda/DynamoDB/S3, with identical training, gating, and serving code in both. Two-stage ETL data-quality gates (ingestion and transformation) block the pipeline and fire Slack/Discord alerts on failure. An XGBoost model with Platt calibration and two independently tuned cascade thresholds routes predictions into auto-resolve, review-queue, and senior-escalation tiers. A champion-challenger gate blocks any retrain that regresses PR-AUC on held-out or stress-test slices, backed by a versioned model registry with JSON model cards. The feature store does true point-in-time joins, an hourly drift monitor runs KS test and PSI, and a 21-day label-delay backfill recomputes precision/recall/F1 once ground truth lands. CI/CD runs on GitHub Actions with OIDC (no long-lived AWS keys) and canary rollouts via hashed customer routing.
+Churn-risk scoring pipeline that runs unchanged in two modes, local Docker/SQLite and AWS Lambda/DynamoDB/S3, with identical training, gating and serving code in both. A calibrated XGBoost model routes each prediction into auto-resolve, review-queue or senior-escalation tiers, while data-quality gates and a champion-challenger check block bad data and any retrain that regresses PR-AUC. It also runs hourly drift monitoring (KS, PSI), backfills metrics once labels land after 21 days, and deploys through GitHub Actions OIDC with canary rollouts.
 
 `Python` `XGBoost` `FastAPI` `Docker` `AWS Lambda` `DynamoDB` `S3` `GitHub Actions`
 
 ---
 
 ### [Click-Fraud & Churn Risk Scoring Platform (ad-platform-ml)](https://github.com/spacey-cadet/ad-fraud)
-Two real-time scoring services, click-fraud detection and churn prediction, share a feature base and deploy as either a free local Docker stack or a serverless AWS stack under a ~$15/month budget. The streaming pipeline (Redpanda + Faust locally; SQS → aggregator Lambda → DynamoDB in production) computes rolling per-user click-count windows for real-time fraud scoring. The AWS path is all Terraform (Lambda container images, DynamoDB, SQS + DLQ, SNS alerting, CloudWatch alarms/dashboards, GitHub OIDC deploy role) and avoids always-on services to stay within budget. Experiments are tracked in MLflow, and every local-vs-cloud architecture trade-off is documented in an ADR.
+Two real-time scoring services, click-fraud detection and churn prediction, share one feature base and deploy as either a free local Docker stack or a serverless AWS stack under ~$15/month. A streaming pipeline (Redpanda + Faust locally; SQS → Lambda → DynamoDB in production) computes rolling per-user click windows for live fraud scoring. The AWS side is all Terraform with no always-on services, with MLflow experiment tracking and an ADR for every local-vs-cloud trade-off.
 
 `Python` `LightGBM` `Redis/Feast` `Redpanda/Faust` `SQS` `DynamoDB` `Terraform` `Docker` `MLflow`
 
@@ -44,7 +52,7 @@ Fine-tuned a 24-layer Transformer for 8-class emotion recognition across RAVDESS
 ---
 
 ### [WavLM SER — Production Inference Pipeline (Deployment)](https://github.com/spacey-cadet/ser-inference)
-Rebuilt a single-endpoint inference demo into a production-grade serving pipeline (FastAPI + Docker on HuggingFace Spaces) covering calibration, drift monitoring, rollout, and latency, all on free-tier infrastructure. Offline-fit Platt/isotonic calibration and a two-threshold confidence cascade let uncertain predictions degrade gracefully instead of returning an overconfident wrong label. Input-validation and voice-activity-trimming gates feed a consent-gated feature-logging pipeline into a KS-test drift monitor and a low-confidence review/labeling queue. In-process champion/challenger canary routing is evaluated offline on PR-AUC and per-class F1 before any rollout. p50/p99 latency is tracked per request and gated on release, with testing and promotion automated through GitHub Actions.
+Rebuilt a single-endpoint emotion-recognition demo into a production-grade serving pipeline (FastAPI + Docker on HuggingFace Spaces) covering calibration, drift monitoring, rollout and latency, all on free-tier infrastructure. Calibration and a two-threshold confidence cascade let uncertain predictions degrade gracefully instead of returning an overconfident wrong label, and a consent-gated logging pipeline feeds a KS-test drift monitor and a low-confidence review queue. Canary routing is checked offline on PR-AUC and per-class F1 before rollout, and p50/p99 latency gates each release through GitHub Actions.
 
 `FastAPI` `Docker` `HuggingFace Spaces` `GitHub Actions` `Great Expectations`
 
