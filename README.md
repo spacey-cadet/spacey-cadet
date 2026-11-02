@@ -14,7 +14,7 @@ Deterministic Terraform risk gate that returns `auto_apply` or `hold` and fails 
 ---
 
 ### [Scoopz](https://github.com/spacey-cadet/scoopz)
-TikTok share-to-caption pipeline, rebuilt from a Termux script pair into a native Android app (Kotlin, Jetpack Compose): share a link and queued background workers download the video in HD and write a ready-to-post caption. On-device ML Kit picks the sharpest frame (faces, on-screen text), and free-tier NVIDIA models with a backup, rate limiting and retries generate the caption at zero cost. Failures turn into plain-language causes and fixes, and the original Termux pipeline (async workers, FastAPI) stays as a working legacy path.
+Native Android app (Kotlin, Jetpack Compose): share a TikTok link and background workers download the HD video and write a ready-to-post caption. ML Kit picks the sharpest frame, free-tier NVIDIA models generate the caption at zero cost, and failures become plain-language fixes. Termux legacy path kept.
 
 **Impact:** the Termux version cut content processing ~58% (2 hrs → 50 min for 40 videos); the app makes the same flow a single tap.
 
@@ -31,14 +31,14 @@ Kaggle RSNA challenge to detect 12 knee abnormalities from MRI when only 58 of 4
 ---
 
 ### [Churn Escalation Detector](https://github.com/spacey-cadet/churn-escalation)
-Churn-risk scoring pipeline that runs unchanged in two modes, local Docker/SQLite and AWS Lambda/DynamoDB/S3, with identical training, gating and serving code in both. A calibrated XGBoost model routes each prediction into auto-resolve, review-queue or senior-escalation tiers, while data-quality gates and a champion-challenger check block bad data and any retrain that regresses PR-AUC. It also runs hourly drift monitoring (KS, PSI), backfills metrics once labels land after 21 days, and deploys through GitHub Actions OIDC with canary rollouts.
+Churn-risk pipeline with identical code locally (Docker/SQLite) and on AWS (Lambda/DynamoDB/S3). Calibrated XGBoost routes predictions into three tiers, guarded by data-quality gates, champion-challenger checks, drift monitoring, and canary deploys.
 
 `Python` `XGBoost` `FastAPI` `Docker` `AWS Lambda` `DynamoDB` `S3` `GitHub Actions`
 
 ---
 
 ### [Click-Fraud & Churn Risk Scoring Platform ](https://github.com/spacey-cadet/ad-fraud)
-Two real-time scoring services, click-fraud detection and churn prediction, share one feature base and deploy as either a free local Docker stack or a serverless AWS stack under ~$15/month. A streaming pipeline (Redpanda + Faust locally; SQS → Lambda → DynamoDB in production) computes rolling per-user click windows for live fraud scoring. The AWS side is all Terraform with no always-on services, with MLflow experiment tracking and an ADR for every local-vs-cloud trade-off.
+Real-time click-fraud and churn scoring services on one shared feature base, deployable as a free local Docker stack or a serverless AWS stack under ~$15/month. Redpanda + Faust (local) or SQS → Lambda → DynamoDB (AWS) compute rolling click windows. Terraform-only, MLflow tracking, ADRs for each trade-off.
 
 `Python` `LightGBM` `Redis/Feast` `Redpanda/Faust` `SQS` `DynamoDB` `Terraform` `Docker` `MLflow`
 
@@ -52,7 +52,7 @@ Fine-tuned a 24-layer Transformer for 8-class emotion recognition across RAVDESS
 ---
 
 ### [WavLM SER — Production Inference Pipeline](https://github.com/spacey-cadet/ser-inference)
-Rebuilt a single-endpoint emotion-recognition demo into a production-grade serving pipeline (FastAPI + Docker on HuggingFace Spaces) covering calibration, drift monitoring, rollout and latency, all on free-tier infrastructure. Calibration and a two-threshold confidence cascade let uncertain predictions degrade gracefully instead of returning an overconfident wrong label, and a consent-gated logging pipeline feeds a KS-test drift monitor and a low-confidence review queue. Canary routing is checked offline on PR-AUC and per-class F1 before rollout, and p50/p99 latency gates each release through GitHub Actions.
+Production-grade emotion-recognition serving pipeline (FastAPI + Docker on HuggingFace Spaces), all free-tier. Calibration and a two-threshold confidence cascade degrade uncertain predictions gracefully, consent-gated logging feeds KS drift monitoring, and canary rollouts are gated on PR-AUC, per-class F1, and p50/p99 latency.
 
 `FastAPI` `Docker` `HuggingFace Spaces` `GitHub Actions` `Great Expectations`
 
