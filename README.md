@@ -7,7 +7,7 @@
 ## Open Source Projects
 
 ### [Infra Sec](https://github.com/spacey-cadet/infra-sec)
-Decision API that reviews every Terraform plan and returns a deterministic `auto_apply` or `hold`, built to never auto-apply a change that quietly loosens security, especially a widened GitHub Actions OIDC trust condition. It parses the JSON plan and runs a glob-aware diff on the trust policy, and a plain-Python rule matrix fails closed on any IAM change, OIDC diff, cost jump of $2/mo or 40%, unseen resource type, or unparseable plan. It runs as a SigV4-signed Lambda Function URL called by a pip-installable CLI that exits 0 for auto-apply and 2 for hold, with an optional AI explainer and classifier that add review context but can never override the verdict.
+Decision API that reviews every Terraform plan and returns a deterministic `auto_apply` or `hold`, built to never auto-apply a change that quietly loosens security, especially a widened GitHub Actions OIDC trust condition. It parses the JSON plan and runs a glob-aware diff on the trust policy, and a plain-Python rule matrix fails closed on any IAM change, OIDC diff, cost jump of $2/mo or 40%, unseen resource type, or unparseable plan. It runs as a SigV4-signed Lambda Function URL called by a pip-installable CLI that exits 0 for auto-apply and 2 for hold, and when a change is held, NVIDIA Nemotron (via Nebius Token Factory or any OpenAI-compatible endpoint) explains it on the merge request and proposes a small Terraform fix that is kept only if the same gate then returns `auto_apply`, so the model can add review context but can never produce or override the verdict.
 
 `Python` `Strands Agents` `Terraform` `AWS Lambda` `SQS` `SNS` `DynamoDB` `S3` `GitHub Actions OIDC` `Infracost` `Docker` `pytest`
 
