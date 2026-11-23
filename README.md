@@ -44,7 +44,7 @@ Real-time click-fraud and churn scoring services on one shared feature base, dep
 
 ---
 
-### [Speech Emotion Recognition — WavLM Fine-Tuning](https://github.com/spacey-cadet)
+### [Speech Emotion Recognition — WavLM Fine-Tuning](https://github.com/spacey-cadet/ser-inference)
 Fine-tuned a 24-layer Transformer for 8-class emotion recognition across RAVDESS, IEMOCAP, and CREMA-D. 77.3% accuracy in-distribution; cross-corpus testing exposed a 16–23pp generalisation drop, diagnosed via arousal/valence failure analysis — a known limit of self-supervised speech embeddings. Scoped fixes: adversarial domain adaptation, speaker disentanglement, Kenya-specific DAPT corpus.
 
 `PyTorch` `HuggingFace` `WavLM` `SpeechBrain` `Transfer Learning`
