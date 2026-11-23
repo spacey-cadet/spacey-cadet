@@ -44,14 +44,14 @@ Real-time click-fraud and churn scoring services on one shared feature base, dep
 
 ---
 
-### [Speech Emotion Recognition — WavLM Fine-Tuning](https://github.com/spacey-cadet/ser-inference)
+### [Speech Emotion Recognition — WavLM Fine-Tuning](https://github.com/spacey-cadet/ser)
 Fine-tuned a 24-layer Transformer for 8-class emotion recognition across RAVDESS, IEMOCAP, and CREMA-D. 77.3% accuracy in-distribution; cross-corpus testing exposed a 16–23pp generalisation drop, diagnosed via arousal/valence failure analysis — a known limit of self-supervised speech embeddings. Scoped fixes: adversarial domain adaptation, speaker disentanglement, Kenya-specific DAPT corpus.
 
 `PyTorch` `HuggingFace` `WavLM` `SpeechBrain` `Transfer Learning`
 
 ---
 
-### [WavLM SER — Production Inference Pipeline](https://github.com/spacey-cadet/ser-inference)
+### [WavLM SER — Production Inference Pipeline](https://github.com/spacey-cadet/ser)
 Production-grade emotion-recognition serving pipeline (FastAPI + Docker on HuggingFace Spaces), all free-tier. Calibration and a two-threshold confidence cascade degrade uncertain predictions gracefully, consent-gated logging feeds KS drift monitoring, and canary rollouts are gated on PR-AUC, per-class F1, and p50/p99 latency.
 
 `FastAPI` `Docker` `HuggingFace Spaces` `GitHub Actions` `Great Expectations`
